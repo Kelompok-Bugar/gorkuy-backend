@@ -1,1 +1,1 @@
-web: gunicorn 'gorkuy-backend.wsgi'
+web: gunicorn 'gorkuy_backend.wsgi'
