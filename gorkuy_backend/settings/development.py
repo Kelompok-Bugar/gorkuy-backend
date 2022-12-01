@@ -3,7 +3,7 @@ from .base import BASE_DIR
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
-    'default': {
+    'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
@@ -17,4 +17,5 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = ['postgresql']
+DEFAULT_DATABASE = 'sqlite3'
+DATABASES['default'] = DATABASES[DEFAULT_DATABASE] 
