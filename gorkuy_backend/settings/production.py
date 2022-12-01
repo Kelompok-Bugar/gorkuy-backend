@@ -3,7 +3,7 @@ import dj_database_url
 import os
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-CSRF_TRUSTED_ORIGINS = ['https://gorkuy.up.railway.app/']
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app/','https://*.gorkuy.up.railway.app/']
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
