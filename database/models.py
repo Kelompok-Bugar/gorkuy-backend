@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import datetime as dt
 
 # Create your models here.
 class UserGorkuy(AbstractUser):
@@ -27,6 +28,8 @@ class Lapangan(models.Model):
     )
     jenis = models.CharField(choices=jenis_choices,max_length=50,default="Futsal")
     harga_perjam = models.IntegerField()
+    jam_buka = models.TimeField(default=dt.time(00, 00))
+    jam_tutup = models.TimeField(default=dt.time(23, 00))
     
 
 class Jadwal(models.Model):

@@ -1,1 +1,1 @@
-web: gunicorn 'gorkuy_backend.wsgi'
+ web: python manage.py migrate && gunicorn gorkuy_backend.wsgi
