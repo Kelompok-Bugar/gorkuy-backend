@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.core.exceptions import ObjectDoesNotExist
 # Create your models here.
 class UserGorkuy(AbstractUser):
     username = models.CharField(max_length=255,primary_key=True)
@@ -15,7 +15,11 @@ class Mitra(UserGorkuy):
 
 class Penyewa(UserGorkuy):
     ## List daftarReservasi
-    pass
+    def get_rekening(self):
+        try:
+            return self.rekening
+        except ObjectDoesNotExist:
+            return None
 
 class Lapangan(models.Model):
     id = models.AutoField(primary_key=True)
@@ -39,15 +43,22 @@ class Reservasi(models.Model):
     id = models.AutoField(primary_key=True)
     tanggal = models.DateField(auto_now_add=True)
     penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE)
-    lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE)
-
-    totalHarga = models.IntegerField()
+    lapangan = models.OneToOneField(Lapangan,on_delete=models.CASCADE)
+    jadwal_dipilih  = models.ForeignKey(Jadwal,on_delete=models.CASCADE)
     ## Pembayaran
 
 class Pembayaran(models.Model):
     id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
-    jumlah = models.IntegerField()
     reservasi = models.ForeignKey(Reservasi, on_delete=models.CASCADE)
 
+class Rekening(models.Model):
+    penyewa = models.OneToOneField(Penyewa,on_delete=models.CASCADE,primary_key= True)
+    saldo = models.BigIntegerField(default=0)
+
+    def decrease_balance(self,amount):
+        self.saldo -= amount
+        if self.saldo < 0:
+            self.saldo = 0
+        return self.saldo
 

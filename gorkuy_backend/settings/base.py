@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'database'
+    'rest_framework',
+    'database',
+    'gorkuy_payment'
 ]
 
 MIDDLEWARE = [
