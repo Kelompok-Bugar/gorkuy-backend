@@ -40,7 +40,7 @@ class Reservasi(models.Model):
     tanggal = models.DateField(auto_now_add=True)
     penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE)
     lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE)
-
+    jadwal = models.ForeignKey(Jadwal, on_delete=models.CASCADE)
     totalHarga = models.IntegerField()
     ## Pembayaran
 
