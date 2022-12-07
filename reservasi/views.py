@@ -1,10 +1,9 @@
 from typing import OrderedDict
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ReservasiForm
-from .models import NoteModel
 from django.contrib.auth.decorators import login_required
 import random
-from django.http import HttpResponseRedirect,  JsonResponse
+from django.http import HttpResponse,  JsonResponse
 from django.template.loader import render_to_string 
 from database.models import Reservasi,Lapangan,Jadwal
 from django.contrib.auth.models import User
@@ -18,7 +17,7 @@ def add_reservasi(request,id):
     lapangan = get_object_or_404(Lapangan,id=id)
     jam_buka = int(lapangan.jam_buka.strftime("%H"))
     jam_tutup = int(lapangan.jam_tutup.strftime("%H"))
-    jadwal = Jadwal.objects.filter(Lapangan=lapangan).all().values()
+    jadwal = Jadwal.objects.filter(lapangan=lapangan).all().values()
     booked_jadwal = list(jadwal)
     list_jadwal = []
     # list jadwal yang tersedia
@@ -39,6 +38,12 @@ def add_reservasi(request,id):
             form.save()
             return redirect('/') # redirect ke halaman pembayaran
     
-    context = {'form': form}
-    return render(request,'',context)
+    context = {'form': form,
+               'id':id}
+    print(id)
+    print(lapangan)
+    print(jadwal)
+    print(jam_buka)
+
+    return render(request,template_name="lapanganDetail.html",context = context)
     

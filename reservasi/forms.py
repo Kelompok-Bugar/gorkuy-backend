@@ -5,11 +5,11 @@ from database.models import Reservasi,Lapangan
 
 
 class ReservasiForm(forms.ModelForm):
-    
+    jadwal = forms.MultipleChoiceField()
     class Meta:
         model = Reservasi
-        jadwal = forms.MultipleChoiceField(    
-            widget  = forms.CheckboxSelectMultiple,
-        )
+        fields = ['jadwal']
+        widgets = {'jadwal':forms.CheckboxSelectMultiple}
+        
     
 	

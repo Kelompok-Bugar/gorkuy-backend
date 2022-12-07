@@ -36,9 +36,13 @@
             </div>
 
             <!-- Div 3: lapangan reservation Form -->
-            <form id="booking-form" action="" method="POST">
+            <form id="booking-form" data-url="{% url 'reservasi:add_reservasi' id %}" method="POST">
 
                 {% csrf_token %}
+
+                <div class="modal-body">
+                    {{form.as_p}}
+                  </div>
 
                 <!-- Input Div -->
                 <div class="input-div">
