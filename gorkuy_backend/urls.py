@@ -19,6 +19,7 @@ import search.urls as search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',search.index),
     path('search/', include(search)),
     path('reservasi/',include('reservasi.urls'))
 ]
