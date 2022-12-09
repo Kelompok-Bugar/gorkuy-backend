@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'database',
     'reservasi',
     'search',
+    'reschedule',
 ]
 
 MIDDLEWARE = [
