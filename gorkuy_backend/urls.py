@@ -23,6 +23,7 @@ urlpatterns = [
     path('',search.index),
     path('search/', include(search)),
     path('',include('reservasi.urls')),
-    path('edit/',include(edit))
+    path('edit/',include(edit)),
+    path('lapangan/payment/',include('gorkuy_payment.urls'))
 ]
 
