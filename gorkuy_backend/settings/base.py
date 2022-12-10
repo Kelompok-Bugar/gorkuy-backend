@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'database',
     'edit_ketersediaan'
+    'reservasi',
+    'search',
+    'reschedule',
 ]
 
 MIDDLEWARE = [
