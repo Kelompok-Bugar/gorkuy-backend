@@ -19,10 +19,11 @@
             <tr>
                 <th>{{reservasi.tanggal}}</th>
                 <th>{{reservasi.lapangan}}</th>
-                <!-- TO DO -->
                 <th><a href="{% url 'reschedule:reschedule_reservasi' reservasi.id %}">Ubah</a></th>
             </tr>
         </table>
-
+    {% else %}
+        <h2>Anda belum membuat reservasi apa pun</h2>
+    {% endif %}
 </body>
 </html>
