@@ -20,6 +20,11 @@ class Penyewa(UserGorkuy):
             return self.rekening
         except ObjectDoesNotExist:
             return None
+    def get_rekening2(self):
+        try:
+            return self.rekeningpaykuy
+        except ObjectDoesNotExist:
+            return None
 
 class Lapangan(models.Model):
     id = models.AutoField(primary_key=True)
@@ -33,19 +38,22 @@ class Lapangan(models.Model):
     harga_perjam = models.IntegerField()
     
 
+class Reservasi(models.Model):
+    id = models.AutoField(primary_key=True)
+    tanggal = models.DateField(auto_now_add=True)
+    penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE,blank=True,null=True)
+    lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE,blank=True,null=True)
+    
+    totalHarga = models.IntegerField(blank=True,null=True)
+    is_paid = models.BooleanField(default=False)
+    ## Pembayaran
+
 class Jadwal(models.Model):
     start = models.TimeField()
     end = models.TimeField()
     tanggal = models.DateField()
     lapangan = models.ForeignKey(Lapangan, on_delete=models.CASCADE)
-
-class Reservasi(models.Model):
-    id = models.AutoField(primary_key=True)
-    tanggal = models.DateField(auto_now_add=True)
-    penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE)
-    lapangan = models.OneToOneField(Lapangan,on_delete=models.CASCADE)
-    jadwal_dipilih  = models.ForeignKey(Jadwal,on_delete=models.CASCADE)
-    ## Pembayaran
+    reservasi = models.ForeignKey(Reservasi,on_delete=models.CASCADE,blank=True,null=True)
 
 class Pembayaran(models.Model):
     id = models.AutoField(primary_key=True)
@@ -53,6 +61,16 @@ class Pembayaran(models.Model):
     reservasi = models.ForeignKey(Reservasi, on_delete=models.CASCADE)
 
 class Rekening(models.Model):
+    penyewa = models.OneToOneField(Penyewa,on_delete=models.CASCADE,primary_key= True)
+    saldo = models.BigIntegerField(default=0)
+
+    def decrease_balance(self,amount):
+        self.saldo -= amount
+        if self.saldo < 0:
+            self.saldo = 0
+        return self.saldo
+
+class RekeningPayKuy(models.Model):
     penyewa = models.OneToOneField(Penyewa,on_delete=models.CASCADE,primary_key= True)
     saldo = models.BigIntegerField(default=0)
 

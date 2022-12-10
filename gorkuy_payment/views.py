@@ -6,25 +6,34 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-@api_view(['POST'])
-def bayar(request):
-    try:
-        reservasi = Reservasi.objects.get(pk=request.data['reservasi_id'])
-        lapangan = reservasi.lapangan
-        jumlah_jadwal = lapangan.jadwal_set.count()
-        harga = lapangan.harga_perJam * jumlah_jadwal
-        rekening = reservasi.penyewa.get_rekening()
-        if rekening.saldo > harga:
-            rekening.decrease_balance(harga)
-            payment = Pembayaran.create(reservasi=reservasi)
-            payment.save()
-            data = PembayaranSerializer(payment).data
-            return Response(data)
-        else:
-            return Response({"status":"failed","error_message":"saldo tidak cukup"},status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({"status":"failed","error_message":"terjadi error pada pembayaran","error":f"{e}"},status=status.HTTP_400_BAD_REQUEST)
-
-
+def payment_page(request,reservasi_id):
+    reservasi = Reservasi.objects.get(id=reservasi_id)
+    if request.method == 'GET':
+        print(f"reservasinya {reservasi_id}")
+        data = {'reservasi' : reservasi}
+    elif request.method == 'POST':
+        try: 
+            if reservasi.is_paid:
+                return render(request,'error.html')
+            lapangan = reservasi.lapangan
+            harga = reservasi.totalHarga
+            if request.POST['jenisRekening'] == 'GorPay':
+                rekening = reservasi.penyewa.get_rekening()
+            else:
+                rekening = reservasi.penyewa.get_rekening2()
+            if rekening.saldo > harga:
+                rekening.decrease_balance(harga)
+                rekening.save()
+                payment = Pembayaran.objects.create(reservasi=reservasi)
+                payment.save()
+                reservasi.is_paid = True
+                reservasi.save()
+                data = PembayaranSerializer(payment).data
+                return render(request,'success.html')
+            else:
+                return render(request,'failed.html')
+        except Exception as e:
+            return render(request,'error.html')
+    return render(request,'payment.html',data)
 
 
