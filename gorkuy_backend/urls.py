@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import search.urls as search
+import edit_ketersediaan.urls as edit
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',search.index),
     path('search/', include(search)),
-    path('',include('reservasi.urls'))
+    path('',include('reservasi.urls')),
+    path('edit/',include(edit))
 ]
+
