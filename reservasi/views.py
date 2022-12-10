@@ -14,6 +14,16 @@ from database.models import Mitra
 from django.http.response import HttpResponse
 # Create your views here.
 
+def reservasi(request):
+    if request.method == 'POST':
+        data = request.body.decode('utf-8')
+        body = json.loads(data) 
+        # TODO(Rey) : save the reservation and redirect to payment page
+        print(body)
+        data = {"success" : True}
+        response = json.JSONEncoder().encode(data)
+        return HttpResponse(response, content_type="application/json")
+
 def add_reservasi(request,id):
     
     user = request.user
@@ -40,9 +50,6 @@ def add_reservasi(request,id):
 
     return render(request,template_name="h.html",context = context)
 
-def late(self):
-    return self.time.hour > 9
-
 
 def list_jadwal_tersedia(request, id, date):
     lapangan = get_object_or_404(Lapangan,id=id)
@@ -55,7 +62,7 @@ def list_jadwal_tersedia(request, id, date):
     booked_jadwal = [getattr(j,'start').strftime("%H") for j in booked_jadwal]
     for i in range(jam_buka,jam_tutup):
         if str(i) in booked_jadwal:
-            pass
+            continue
         j = i+1
         formatted_j = str(j)+":00"
         formatted_i = str(i)+":00"
