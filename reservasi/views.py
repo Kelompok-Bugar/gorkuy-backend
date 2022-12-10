@@ -1,6 +1,6 @@
 from typing import OrderedDict
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ReservasiForm
+from .forms import ReservasiForm,DateForm
 from django.contrib.auth.decorators import login_required
 import random
 from django.http import HttpResponse,  JsonResponse
@@ -15,35 +15,58 @@ def add_reservasi(request,id):
     
     user = request.user
     lapangan = get_object_or_404(Lapangan,id=id)
-    jam_buka = int(lapangan.jam_buka.strftime("%H"))
-    jam_tutup = int(lapangan.jam_tutup.strftime("%H"))
-    jadwal = Jadwal.objects.filter(lapangan=lapangan).all().values()
-    booked_jadwal = list(jadwal)
-    list_jadwal = []
-    # list jadwal yang tersedia
-    # booked_jadwal = [i.value for i in booked_jadwal]
-    # for i in range(jam_buka,jam_tutup):
-    #   if booked_jadwal.contains(i):
-    #      pass
-    #   else:
-    #       list_jadwal.append(i)
     
-    form = ReservasiForm()
-    form.fields['jadwal'].choices = list_jadwal
+    
+    
+    form_1 = DateForm()
     
     if request.method == 'POST':
-        form = ReservasiForm(request.POST)
-        form.fields['jadwal'].choices = list_jadwal
-        if form.is_valid():
-            form.save()
-            return redirect('/') # redirect ke halaman pembayaran
+        print("halo")
+        form_1 = DateForm(request.POST)
+        if form_1.is_valid():
+            date = request.POST.get('reserve_date')
+            
+            list_jadwal = list_jadwal_tersedia(lapangan,date)
+            context = {'form_1': form_1,'id':id}
+            return render(request,template_name="h.html",context=context)
+        # form.fields['jadwal'].choices = list_jadwal
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect('/') # redirect ke halaman pembayaran
     
-    context = {'form': form,
+    context = {'form_1': form_1,
                'id':id}
-    print(id)
-    print(lapangan)
-    print(jadwal)
-    print(jam_buka)
+    
 
-    return render(request,template_name="lapanganDetail.html",context = context)
+    return render(request,template_name="h.html",context = context)
+
+def late(self):
+    return self.time.hour > 9
+
+
+def list_jadwal_tersedia(lapangan,date):
+    
+    jam_buka = int(lapangan.jam_buka.strftime("%H"))
+    jam_tutup = int(lapangan.jam_tutup.strftime("%H"))
+    
+    jadwal = Jadwal.objects.filter(lapangan=lapangan,tanggal=date)
+    booked_jadwal = list(jadwal)
+    list_jadwal = []
+    booked_jadwal = [getattr(j,'start').strftime("%H") for j in booked_jadwal]
+    for i in range(jam_buka,jam_tutup):
+      if str(i) in booked_jadwal:
+         pass
+      else:
+          list_jadwal.append(i)
+    print()
+    print()
+    print("jam buka lapangan:",jam_buka)
+    print("jam buka lapangan:",jam_tutup)
+    print("jadwal yg tersedia:",list_jadwal)
+    
+    return list_jadwal
+
+
+
+    
     
