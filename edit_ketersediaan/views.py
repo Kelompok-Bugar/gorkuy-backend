@@ -65,6 +65,9 @@ def edit_jadwal(request, id):
 def validate_change(lapangan, jam_buka, jam_tutup):
     jadwals = lapangan.jadwal_set.all().order_by('start').values()
 
+    if len(jadwals)==0:
+        return True
+
     first_jadwal = jadwals[0]
     last_jadwal = jadwals[len(jadwals)-1]
 
