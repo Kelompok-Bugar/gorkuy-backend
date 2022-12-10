@@ -43,52 +43,16 @@
                             <div class="modal-body">
                                 <form action="">
                                     <label>Tanggal:</label>
-                                    <input type="date" id="tanggal" name="tanggal"
-                                        onchange="if (!this.value.startsWith('0')) showHours();">
-                                        <div>
-                                            <div class="app-check">
-                                              <input type="radio" class="option-input radio" name="example" />
-                                              <div class="app-border">
-                                        
-                                                <label class="app-label">9:00 AM
-                                                </label>
-                                              </div>
-                                              <input type="radio" class="option-input radio" disabled name="example" />
-                                              <div class="app-border">
-                                        
-                                                <label class="app-label">9:30 AM
-                                                </label>
-                                              </div>
-                                              <input type="radio" class="option-input radio" name="example" disabled />
-                                              <div class="app-border">
-                                        
-                                                <label class="app-label">10:00 AM
-                                                </label>
-                                              </div>
-                                              <input type="radio" class="option-input radio" name="example" />
-                                              <div class="app-border">
-                                        
-                                                <label class="app-label">10:30 AM
-                                                </label>
-                                              </div>
-                                              <input type="radio" class="option-input radio" name="example" />
-                                              <div class="app-border">
-                                        
-                                                <label class="app-label">11:00 AM
-                                                </label>
-                                              </div>
-                                              <input type="radio" class="option-input radio" name="example" disabled />
-                                              <div class="app-border">
-                                        
-                                                <label class="app-label">11:30 AM
-                                                </label>
-                                              </div>
-                                            </div>
-                                          </div>
+                                    <input type="date" id="{{id}}" name="tanggal"
+                                        onchange="if (!this.value.startsWith('0')) showHours(id,this.value);">
+
+                                    <div id="all-hours"></div>
+
                                 </form>
                             </div>
-                            <div class="modal-footer">
-                                <!-- <button type="submit" id="dateBtn" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" class="btn btn-primary">Next</button> -->
+                            <div class="modal-footer" id="book" style="display: none;">
+                                <button id="book-button" onclick="onBookClick('{{ id }}')" data-bs-target="#exampleModalToggle2"
+                                    data-bs-toggle="modal" class="btn btn-primary">Book</button>
                             </div>
                         </form>
                     </div>
@@ -271,10 +235,54 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
     <script>
-        function showHours() {
+        const selectedHours = [];
+
+        function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+        function onBookClick(id) {
+            var xhr = new XMLHttpRequest();
+            var url = '/lapangan/api/reserve';
+            var csrftoken = getCookie('csrftoken');
+            console.log(csrftoken)
+
+            xhr.open('POST', url, true);
+
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+            xhr.onreadystatechange = function () {
+                //Call a function when the state changes.
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // TODO(Rey) : Redirect this url to payment page
+                    window.location.href = '/lapangan/' + id;
+                }
+            }
+            body = {"lapangan":id,"hours":selectedHours}
+            params = JSON.stringify(body)
+            console.log(params);
+            xhr.send(params);
+        }
+
+
+
+        function showHours(id, date) {
             // TODO(Adiet): Add logic
             var xhr = new XMLHttpRequest();
-            var url = "/lapangan/api/1/2022-12-10";
+            var url = `/lapangan/api/${id}/${date}`;
             console.log(url);
 
             // if (offset == 0)
@@ -288,15 +296,47 @@
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (this.status === 0 || (this.status >= 200 && this.status < 400)) {
                         // The request has been completed successfully
-                        console.log(this.status);
-                        console.log("SUCCSESS");
-                        console.log(xhr.responseText);
+                        var hoursList = JSON.parse(this.responseText)['hours'];
+
+                        allHoursContainer = document.getElementById("all-hours");
+                        while (allHoursContainer.hasChildNodes()) {
+                            allHoursContainer.removeChild(allHoursContainer.firstChild);
+                        }
+
+                        hoursList.forEach(hour => {
+                            var hourContainer = document.createElement('div');
+                            hourContainer.className = "timeslot";
+                            hourContainer.innerHTML = hour;
+                            hourContainer.onclick = function () {
+                                var bookButton = document.getElementById("book");
+                                console.log(hourContainer.style.backgroundColor);
+                                if (hourContainer.style.backgroundColor == "rgb(0, 192, 157)") {
+                                    hourContainer.style.removeProperty('background-color');
+                                    var index = selectedHours.indexOf(hour);
+                                    selectedHours.splice(index, 1);
+                                } else {
+                                    hourContainer.style.backgroundColor = "#00c09d";
+                                    selectedHours.push(hour);
+                                }
+
+                                if (selectedHours.length == 0) {
+                                    bookButton.style.display = "none";
+
+                                } else {
+                                    bookButton.style.display = "initial";
+                                }
+
+                                console.log(selectedHours);
+                            };
+
+                            allHoursContainer.appendChild(hourContainer);
+                        });
 
                     } else {
                         // Oh no! There has been an error with the request!
                     }
                 }
-                
+
                 // changeState(this, keyword, offset);
             };
 

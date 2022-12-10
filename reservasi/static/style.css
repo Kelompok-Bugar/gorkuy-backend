@@ -152,6 +152,24 @@
 	text-decoration: none;
 	color: var(--color-title);
   }
+
+  .timeslot {
+	color: black;
+	padding:7px;
+	margin-top: 5px;
+	font-size: 14px;
+	border-radius: 3px;
+	vertical-align: center;
+	text-align:center;
+	transition: 0.3s;
+  }
+  
+  .timeslot:hover { 
+	background-color: #2CA893;
+	cursor: pointer;
+  }
+
+
   
   #menubtn {
 	display: none;
@@ -454,5 +472,9 @@
   /* Mark the steps that are finished and valid: */
   .step.finish {
 	background-color: #04AA6D;
+  }
+
+  #book-button {
+	width: 100%;
   }
   
