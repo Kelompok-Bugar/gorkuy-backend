@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Daftar Reservasi</h2>
+    {% if list_reservasi %}
+        <table>
+            <tr>
+                <th>Tanggal</th>
+                <th>Lapangan</th>
+                <th>Reschedule</th>
+            </tr>
+            {% for reservasi in list_reservasi %}
+            <tr>
+                <th>{{reservasi.tanggal}}</th>
+                <th>{{reservasi.lapangan}}</th>
+                <!-- TO DO -->
+                <th><a href="{% url 'reschedule:reschedule_reservasi' reservasi.id %}">Ubah</a></th>
+            </tr>
+        </table>
+
+</body>
+</html>
