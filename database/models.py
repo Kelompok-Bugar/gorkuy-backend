@@ -32,20 +32,21 @@ class Lapangan(models.Model):
     jam_tutup = models.TimeField(default=dt.time(23, 00))
     
 
+class Reservasi(models.Model):
+    id = models.AutoField(primary_key=True)
+    tanggal = models.DateField(auto_now_add=True)
+    penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE,blank=True,null=True)
+    lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE,blank=True,null=True)
+    
+    totalHarga = models.IntegerField(blank=True,null=True)
+    ## Pembayaran
+
 class Jadwal(models.Model):
     start = models.TimeField()
     end = models.TimeField()
     tanggal = models.DateField()
     lapangan = models.ForeignKey(Lapangan, on_delete=models.CASCADE)
-
-class Reservasi(models.Model):
-    id = models.AutoField(primary_key=True)
-    tanggal = models.DateField(auto_now_add=True)
-    penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE)
-    lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE)
-    jadwal = models.ForeignKey(Jadwal,on_delete=models.CASCADE,blank=True,null=True)
-    totalHarga = models.IntegerField()
-    ## Pembayaran
+    reservasi = models.ForeignKey(Reservasi,on_delete=models.CASCADE,blank=True,null=True)
 
 class Pembayaran(models.Model):
     id = models.AutoField(primary_key=True)
