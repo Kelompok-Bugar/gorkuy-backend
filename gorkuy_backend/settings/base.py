@@ -38,8 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'database',
+    'gorkuy_payment',
+    'edit_ketersediaan',
+    'reservasi',
     'search',
+    'reschedule',
 ]
 
 MIDDLEWARE = [

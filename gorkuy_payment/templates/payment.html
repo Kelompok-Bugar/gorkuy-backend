@@ -1,0 +1,97 @@
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" />
+    <link href="{% static 'css/payment.css' %}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/payment.js' %}"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-lg-0 mb-3">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-4">
+                <div class="card p-3">
+                    <p class="mb-0 fw-bold h4">Payment Methods</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card p-3">
+                    <div class="card-body border p-0">
+                        <p id="Collapse2">
+                            <a class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-between"
+                                data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="true"
+                                aria-controls="collapseExample">
+                                <span class="fw-bold">GORPAY</span>
+                                <span class="fab fa-cc-paypal">
+                                </span>
+                            </a>
+                        </p>
+                        <div class="collapse p-3 pt-0" id="collapseExample2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <p class="h4 mb-0">Summary</p>
+                                        <p class="mb-0"><span class="fw-bold">Product: </span><span class="c-green">Lapangan {{ reservasi.lapangan.jenis }}</span></p>
+                                        <p class="mb-0"><span class="fw-bold">Price: </span><span
+                                                class="c-green">  {{ reservasi.totalHarga }}</span></p>
+                                        <p class="mb-0"><span class="fw-bold">Saldo: </span><span
+                                            class="c-green">  {{ reservasi.penyewa.rekening.saldo }}</span></p>
+                                        <input type="hidden" id="jenisRekening" name="jenisRekening" value="GorPay">  
+                                        <input class="btn btn-secondary" type="submit" value="Submit">
+
+                                    </form>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body border p-0">
+                        <p id="Collapse1">
+                            <a class="btn btn-primary p-2 w-100 h-100 d-flex align-items-center justify-content-between"
+                                data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true"
+                                aria-controls="collapseExample">
+                                <span class="fw-bold">PayKuy</span>
+                                <span class="">
+                                    <span class="fab fa-cc-amex"></span>
+                                    <span class="fab fa-cc-mastercard"></span>
+                                    <span class="fab fa-cc-discover"></span>
+                                </span>
+                            </a>
+                        </p>
+                        <div class="collapse show p-3 pt-0" id="collapseExample">
+                            <div class="row">
+                                <div class="col-8">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <p class="h4 mb-0">Summary</p>
+                                        <p class="mb-0"><span class="fw-bold">Product: </span><span class="c-green">Lapangan {{ reservasi.lapangan.jenis }}</span></p>
+                                        <p class="mb-0"><span class="fw-bold">Price: </span><span
+                                                class="c-green">  {{ reservasi.totalHarga }}</span></p>
+                                        <p class="mb-0"><span class="fw-bold">Saldo: </span><span
+                                            class="c-green">  {{ reservasi.penyewa.rekeningpaykuy.saldo }}</span></p>
+                                        <input type="hidden" id="jenisRekening" name="jenisRekening" value="PayKuy">
+                                        <input class="btn btn-secondary" type="submit" value="Bayar">
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+</body>
+
+</html>
