@@ -21,8 +21,10 @@
     <header class="section header">
         <div class="header__col">
 
-            <h1 class="title">NAMA LAPANGAN</h1>
-            <p>DESKRIPSI LAPANGAN</p>
+            <h1 class="title">Lapangan {{nama}}</h1>
+            <p>Jam Buka: {{jam_buka}}-{{jam_tutup}}</p>
+            <p>Biaya = {{biaya}}/jam</p>
+
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
                 Reservasi
             </button>
@@ -51,8 +53,9 @@
                                 </form>
                             </div>
                             <div class="modal-footer" id="book" style="display: none;">
-                                <button id="book-button" onclick="onBookClick('{{ id }}')" data-bs-target="#exampleModalToggle2"
-                                    data-bs-toggle="modal" class="btn btn-primary">Book</button>
+                                <button id="book-button" onclick="onBookClick('{{ id }}',)"
+                                     data-bs-toggle="modal"
+                                    class="btn btn-primary">Book</button>
                             </div>
                         </form>
                     </div>
@@ -238,26 +241,59 @@
         const selectedHours = [];
 
         function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
             }
+            return cookieValue;
         }
-    }
-    return cookieValue;
-}
+        function getReserveID() {
+
+            var xhr = new XMLHttpRequest();
+            var url = '/lapangan/api/reserve';
+            xhr.open('GET', url, false);
+            xhr.send()
+
+
+            xhr.onload = function () {
+                if (xhr.status != 200) { // analyze HTTP status of the response
+                     // e.g. 404: Not Found
+                } else { // show the result
+                    var result = JSON.parse(xhr.responseText)['id']
+
+                    return result
+                    // response is the server response
+
+                }
+            }
+            if (xhr.status === 200) {
+                var result = JSON.parse(xhr.responseText)['id']
+
+                    return result
+            }
+
+
+        }
 
         function onBookClick(id) {
+            var date = document.getElementById(`${id}`).value
+            
             var xhr = new XMLHttpRequest();
             var url = '/lapangan/api/reserve';
             var csrftoken = getCookie('csrftoken');
-            console.log(csrftoken)
+
+            var reservasi_id = getReserveID();
+            
+            
+          
 
             xhr.open('POST', url, true);
 
@@ -268,10 +304,11 @@
                 //Call a function when the state changes.
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // TODO(Rey) : Redirect this url to payment page
-                    window.location.href = '/lapangan/' + id;
+                    let url = location.href
+                    location.href = 'payment/pay/' + reservasi_id;
                 }
             }
-            body = {"lapangan":id,"hours":selectedHours}
+            body = { "date":date, "reservasi_id":reservasi_id, "lapangan": id, "hours": selectedHours }
             params = JSON.stringify(body)
             console.log(params);
             xhr.send(params);

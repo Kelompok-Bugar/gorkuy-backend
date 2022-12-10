@@ -35,10 +35,10 @@ class Lapangan(models.Model):
 class Reservasi(models.Model):
     id = models.AutoField(primary_key=True)
     tanggal = models.DateField(auto_now_add=True)
-    penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE)
-    lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE)
+    penyewa = models.ForeignKey(Penyewa,on_delete=models.CASCADE,blank=True,null=True)
+    lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE,blank=True,null=True)
     
-    totalHarga = models.IntegerField()
+    totalHarga = models.IntegerField(blank=True,null=True)
     ## Pembayaran
 
 class Jadwal(models.Model):

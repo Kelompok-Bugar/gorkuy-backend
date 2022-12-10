@@ -20,5 +20,5 @@ import search.urls as search
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('search/', include(search)),
-    path('lapangan/',include('reservasi.urls'))
+    path('',include('reservasi.urls'))
 ]
