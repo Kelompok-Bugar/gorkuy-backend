@@ -15,8 +15,7 @@ def reservasi(request):
        
         data = request.body.decode('utf-8')
         body = json.loads(data) 
-        print(body)
-        # TODO(Rey) : save the reservation and redirect to payment page
+       
         tanggal = body['date']
         id_reservasi = body['reservasi_id']
         id_lapangan = body['lapangan']
@@ -37,7 +36,7 @@ def reservasi(request):
     
     reservasi_obj = Reservasi.objects.create()
     reservasi_obj.save
-    print(reservasi_obj.id)
+   
     response_data = {'id':reservasi_obj.id}
     return HttpResponse(json.dumps(response_data), content_type="application/json") 
 
@@ -61,6 +60,7 @@ def add_reservasi(request,id):
         #     form.save()
         #     return redirect('/') # redirect ke halaman pembayaran
     lapangan = get_object_or_404(Lapangan,id=id)
+    kategori = lapangan.jenis
     jam_buka = lapangan.jam_buka
     jam_tutup = lapangan.jam_tutup
     biaya = lapangan.harga_perjam
@@ -71,9 +71,13 @@ def add_reservasi(request,id):
                'jam_tutup':jam_tutup,
                'biaya':biaya}
     
-
-    return render(request,template_name="h.html",context = context)
-
+    
+    if kategori == 'Futsal':
+        return render(request,template_name="futsal.html",context = context)
+    elif kategori == 'Bulutangkis':
+        return render(request,template_name="bulutangkis.html",context = context)
+    else:
+        return render(request,template_name="basket.html",context = context)        
 
 def list_jadwal_tersedia(request, id, date):
     lapangan = get_object_or_404(Lapangan,id=id)
@@ -96,11 +100,7 @@ def list_jadwal_tersedia(request, id, date):
             formatted_i = "0"+formatted_i
         formatted_time = formatted_i + "-" + formatted_j
         list_jadwal.append(formatted_time)
-    print()
-    print()
-    print("jam buka lapangan:",jam_buka)
-    print("jam buka lapangan:",jam_tutup)
-    print("jadwal yg tersedia:",list_jadwal)
+   
 
     data = {"hours" : list_jadwal}
     response = json.JSONEncoder().encode(data)
