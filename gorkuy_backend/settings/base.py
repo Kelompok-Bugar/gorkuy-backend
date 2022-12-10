@@ -38,9 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'rest_framework',
     'database',
     'gorkuy_payment'
+=======
+    'database',
+    'edit_ketersediaan'
+    'reservasi',
+    'search',
+    'reschedule',
+>>>>>>> 16f5f24864123ee510506f0513ea1f8f525fae2b
 ]
 
 MIDDLEWARE = [
@@ -116,4 +124,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
 

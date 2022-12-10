@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script></script>
+</head>
+
+<body>
+
+
+    <div class="container py-5">
+        <!-- For demo purpose -->
+
+        <div class="row text-center text-black mb-5">
+            <div class="col-lg-7 mx-auto">
+                {% if is_search %}
+                <h1 class="display-4">Hasil pencarian</h1>
+                <p class="lead mb-0">
+                    "{{keyword}}"
+                </p>
+                <p class="lead">
+                    Ditemukan {{size}} lapangan
+                </p>
+                {% else %}
+                <h1 class="display-4">Gorkuy</h1>
+                {% endif %}
+                <div class="search-box">
+                    <input type="text" placeholder="Cari nama GOR..." class="search" id="search-field"
+                        onkeydown="searchListener(this)">
+                    <button type="submit" onclick="search(this.previousElementSibling.value)"><i
+                            class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+        <!-- End -->
+
+
+
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <!-- List group-->
+                <ul class="list-group shadow">
+                    {% if result %}
+                    {% for mitra in result %}
+                    {% for lapangan in mitra.fields.lapangans %}
+                    <!-- list group item-->
+                    <li class="list-group-item" id="kotak" onclick="lapangan('{{lapangan.pk}}')">
+                        <!-- Custom content-->
+                        <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                            <div class="media-body order-2 order-lg-1">
+                                <h5 class="mt-0 font-weight-bold mb-2">Lapangan {{lapangan.fields.jenis}}</h5>
+                                <p class="text-muted mb-0 medium">
+                                    GOR: {{lapangan.fields.mitra}}
+                                </p>
+                                <p class="font-italic text-muted mb-0 medium">
+                                    Jam buka: {{lapangan.fields.jam_buka}}-{{lapangan.fields.jam_tutup}}
+                                </p>
+                                <div class="d-flex align-items-center justify-content-between mt-1">
+                                    <h6 class="font-weight-bold my-2">Rp{{lapangan.fields.harga_perjam}} / jam</h6>
+                                    <ul class="list-inline small">
+                                        <li class="list-inline-item m-0">
+                                            <i class="fa fa-star text-success"></i>
+                                        </li>
+                                        <li class="list-inline-item m-0">
+                                            <i class="fa fa-star text-success"></i>
+                                        </li>
+                                        <li class="list-inline-item m-0">
+                                            <i class="fa fa-star text-success"></i>
+                                        </li>
+                                        <li class="list-inline-item m-0">
+                                            <i class="fa fa-star text-success"></i>
+                                        </li>
+                                        <li class="list-inline-item m-0">
+                                            <i class="fa fa-star text-success"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% if lapangan.fields.jenis == "Basket" %}
+                            <img src="https://img.freepik.com/premium-vector/isometric-basketball-court-with-seats-vector-illustration_264840-293.jpg?w=200"
+                                alt="Generic placeholder image" width="200" height="160"
+                                class="ml-lg-5 order-1 order-lg-2" />
+                            {% elif lapangan.fields.jenis == "Bulutangkis" %}
+                            <img src="https://img.freepik.com/premium-vector/isometric-badminton-court_613611-76.jpg"
+                                alt="Generic placeholder image" width="200" height="160"
+                                class="ml-lg-5 order-1 order-lg-2" />
+                            {% else %}
+                            <img src="https://static.vecteezy.com/system/resources/previews/000/201/179/non_2x/isometric-soccer-field-vector.png"
+                                alt="Generic placeholder image" width="200" height="160"
+                                class="ml-lg-5 order-1 order-lg-2" />
+                            {% endif %}
+
+                        </div>
+                        <!-- End -->
+                    </li>
+                    <!-- End -->
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+
+                    <!-- list group item-->
+
+                    <!-- End -->
+                </ul>
+                <!-- End -->
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    function searchListener(keyword) {
+        if (event.keyCode == 13) {
+            search(keyword.value);
+        }
+    }
+
+    function search(keyword) {
+        window.location.href = ("/search/" + keyword);
+    }
+
+    function lapangan(id) {
+        window.location.href= ("/lapangan/" + id);
+    }
+
+</script>
+<style>
+    body {
+        background: #00b09b;
+        background: -webkit-linear-gradient(to right, #00b09b, #96c93d);
+        background: linear-gradient(to right, #00b09b, #96c93d);
+        min-height: 100vh;
+    }
+
+    #kotak {
+        transition: 0.3s;
+    }
+
+    #kotak:hover {
+        background-color: #96c93d;
+        cursor: pointer;
+    }
+
+    .search-box {
+        margin-top: 100px;
+    }
+
+    .search-box button {
+        float: left;
+        width: 20%;
+        height: 60px;
+        padding: 12px 20px;
+        background: #00b09b;
+        color: white;
+        font-size: 24px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .search {
+        float: left;
+        width: 80%;
+        background: #f1f1f1;
+        border: none;
+        font-size: 24px;
+        padding: 12px 20px;
+    }
+
+    .search:focus {
+        outline-color: #00b09b;
+    }
+
+    .text-gray {
+        color: #aaa;
+    }
+</style>
+
+</html>

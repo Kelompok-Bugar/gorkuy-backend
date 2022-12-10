@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+<<<<<<< HEAD
 from django.core.exceptions import ObjectDoesNotExist
+=======
+import datetime as dt
+
+>>>>>>> 16f5f24864123ee510506f0513ea1f8f525fae2b
 # Create your models here.
 class UserGorkuy(AbstractUser):
     username = models.CharField(max_length=255,primary_key=True)
@@ -36,6 +41,8 @@ class Lapangan(models.Model):
     )
     jenis = models.CharField(choices=jenis_choices,max_length=50,default="Futsal")
     harga_perjam = models.IntegerField()
+    jam_buka = models.TimeField(default=dt.time(00, 00))
+    jam_tutup = models.TimeField(default=dt.time(23, 00))
     
 
 class Reservasi(models.Model):
@@ -45,7 +52,10 @@ class Reservasi(models.Model):
     lapangan = models.ForeignKey(Lapangan,on_delete=models.CASCADE,blank=True,null=True)
     
     totalHarga = models.IntegerField(blank=True,null=True)
+<<<<<<< HEAD
     is_paid = models.BooleanField(default=False)
+=======
+>>>>>>> 16f5f24864123ee510506f0513ea1f8f525fae2b
     ## Pembayaran
 
 class Jadwal(models.Model):

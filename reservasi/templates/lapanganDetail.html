@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapangan Detail</title>
+    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
+
+    
+</head>
+
+<body>
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <!-- lapangan Image -->
+        <div class="image">
+            <img
+                src="http://redaksi.waspada.co.id/v2021/wp-content/uploads/2022/02/Lapangan-Futsal.gif">
+        </div>
+
+        <!-- Lapangan Details -->
+        <div class="lapangan">
+
+
+            <!-- Div 1: lapangan Information -->
+            <div class="lapangan-info">
+                <h1>{{room_category}}</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id optio rem saepe culpa architecto tempora
+                    numquam debitis reiciendis! Quaerat laudantium consequuntur doloribus quod placeat consectetur
+                    veniam,
+                    rerum repellendus magnam labore. </p>
+            </div>
+
+            <!-- Div 3: lapangan reservation Form -->
+            <form id="booking-form" data-url="{% url 'reservasi:add_reservasi' id %}" method="POST">
+
+                {% csrf_token %}
+
+                <div class="modal-body">
+                    {{form.as_p}}
+                  </div>
+
+                <!-- Input Div -->
+                <div class="input-div">
+                    <label for="id_book_date">date : </label>
+                    <input type="datetime-local" id="id_check_in" name="book_date">
+                </div>
+
+                <!-- Input Div -->
+                <div class="input-div">
+                    <label for="id_book_time">time : </label>
+                    <input type="datetime-local" id="id_check_out" name="book_time">
+                </div>
+
+                <!-- Input Div -->
+                <div class="input-div">
+                    <button type="submit">Book</button>
+                </div>
+
+            </form>
+
+        </div> <!-- END Room Div -->
+
+    </div> <!-- END Main Content Div -->
+
+</body>
+
+</html>
