@@ -22,7 +22,7 @@ import reschedule
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',search.index),
-    path('reschedule',include(reschedule.urls)),
+    path('reschedule/',include(reschedule.urls)),
     path('search/', include(search)),
     path('',include('reservasi.urls')),
     path('edit/',include(edit)),
