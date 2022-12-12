@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 import search.urls as search
 import edit_ketersediaan.urls as edit
+import reschedule
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',search.index),
+    path('reschedule',include(reschedule.urls)),
     path('search/', include(search)),
     path('',include('reservasi.urls')),
     path('edit/',include(edit)),
